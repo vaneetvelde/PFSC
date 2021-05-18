@@ -1,12 +1,3 @@
-.simulate_league_table<-function(simulation, remaining_matches, results){
-  remaining_matches[c("home_score","away_score")]<-simulation
-  results<-results[colnames(remaining_matches)]
-  results<-rbind(results, remaining_matches)
-  table1<-league_table(results)
-  return(table1$team)
-}
-
-
 #' Simulate the remainder of a double round robin league and create a probabilistic final standing.
 #'
 #' This function creates a probabilistic final standing, given the played matches
@@ -25,7 +16,7 @@
 #' simulate_league(results)
 #' @export
 
-simulate_league<-function(results, S=10000, mtr=FALSE, criteria=c("GD","GS","W"), strengths=FALSE){
+simulate_league<-function(results, S=100000, mtr=FALSE, criteria=c("GD","GS","W"), strengths=FALSE){
   teams<-sort(unique(c(results$home_team, results$away_team)))
   nb.teams<-length(teams)
   all_matches<-subset(merge(teams, teams), x!=y)
@@ -33,6 +24,7 @@ simulate_league<-function(results, S=10000, mtr=FALSE, criteria=c("GD","GS","W")
   rownames(all_matches)<-NULL
   remaining_matches<-all_matches[!paste0(all_matches$home_team, all_matches$away_team)%in%
                                    paste0(results$home_team, results$away_team),]
+  played_matches<-results[c("home_team","away_team","home_score","away_score")]
   nmatch<-nrow(remaining_matches)
   MLE<-team_ratings(results)
   ratings<-MLE$ratings
@@ -44,13 +36,20 @@ simulate_league<-function(results, S=10000, mtr=FALSE, criteria=c("GD","GS","W")
   sim_data$lambda1<-exp(beta0+h+sim_data$strengths.x-sim_data$strengths.y)
   sim_data$lambda2<-exp(beta0+sim_data$strengths.y-sim_data$strengths.x)
   cov_goals<-rpois(S*nmatch,lambda=betaC)
-  simulated_home_goals<-rpois(S*nmatch,lambda=sim_data$lambda1)+cov_goals
-  simulated_away_goals<-rpois(S*nmatch,lambda=sim_data$lambda2)+cov_goals
-  simulations<-array(data=c(simulated_home_goals, simulated_away_goals), dim=c(nmatch,S,2))
-  all_tables<-apply(simulations,2,.simulate_league_table, remaining_matches, results)
-  PFS<-data.frame(matrix(0, nrow=nb.teams, ncol=nb.teams))
-  team_probs<-function(y){sapply(teams, function(x){mean(all_tables[y,]==x)})}
-  PFS<-sapply(1:nb.teams, team_probs)
+  simulations<-array(data=c(rpois(S*nmatch,lambda=sim_data$lambda1)+cov_goals,
+                            rpois(S*nmatch,lambda=sim_data$lambda2)+cov_goals),
+                     dim=c(nmatch,S,2))
+  standings<-list()
+  for(i in 1:S){
+    remaining_matches[c("home_score","away_score")]<-simulations[,i,]
+    sim_results<-rbind(played_matches, remaining_matches)
+    table1<-league_table(sim_results, mtr=mtr,criteria = criteria )
+    standings[[i]]<-order(table1$team)
+  }
+  standings2<-do.call(cbind,standings)
+  team_probs<-function(team){sapply(1:nb.teams,function(rank){mean(standings2[team,]==rank)})}
+  PFS<-t(sapply(1:nb.teams, team_probs))
+  rownames(PFS)<-teams
   exp_rank<-sapply(teams, function(team){PFS[team,]%*%1:nb.teams})
   PFS<-data.frame(cbind(PFS, exp_rank))
   PFS<-PFS[order(exp_rank),]
@@ -59,5 +58,4 @@ simulate_league<-function(results, S=10000, mtr=FALSE, criteria=c("GD","GS","W")
   }else{
     return(PFS)
   }
-
 }

@@ -1,3 +1,15 @@
+.calculate_criteria<-function(team,m){
+  M<-sum(m$home_team==team| m$away_team==team)
+  W<-sum((m$home_score>m$away_score & m$home_team==team)|(m$home_score<m$away_score & m$away_team==team))
+  D<-sum(m$home_score==m$away_score & (m$home_team==team|m$away_team==team))
+  L<-sum((m$home_score<m$away_score & m$home_team==team)|(m$home_score>m$away_score & m$away_team==team))
+  GS<-sum(m$home_score[m$home_team==team])+sum(m$away_score[m$away_team==team])
+  GC<-sum(m$home_score[m$away_team==team])+sum(m$away_score[m$home_team==team])
+  GD<-GS-GC
+  P<-3*W+D
+  return(c(M,W,D,L,GS,GC,GD,P))
+}
+
 #' Create the official league table
 #'
 #' This function creates the official league table, given the match results.
@@ -20,18 +32,7 @@ league_table<-function(results, mtr=FALSE, criteria=c("GD","GS","W")){
   teams<-sort(unique(c(m$home_team, m$away_team)))
   tab<-data.frame(team=teams,M=0, W=0, D=0, L=0, GS=0,
                   GC=0, GD=0,P=0, stringsAsFactors = F)
-  calculate_criteria<-function(team,m){
-    M<-sum(m$home_team==team| m$away_team==team)
-    W<-sum((m$home_score>m$away_score & m$home_team==team)|(m$home_score<m$away_score & m$away_team==team))
-    D<-sum(m$home_score==m$away_score & (m$home_team==team|m$away_team==team))
-    L<-sum((m$home_score<m$away_score & m$home_team==team)|(m$home_score>m$away_score & m$away_team==team))
-    GS<-sum(m$home_score[m$home_team==team])+sum(m$away_score[m$away_team==team])
-    GC<-sum(m$home_score[m$away_team==team])+sum(m$away_score[m$home_team==team])
-    GD<-GS-GC
-    P<-3*W+D
-    return(data.frame(M,W,D,L,GS,GC,GD,P))
-  }
-  tab[c("M","W","D","L","GS","GC","GD","P")]<-do.call(rbind, lapply(teams, FUN=calculate_criteria, m=results))
+  tab[c("M","W","D","L","GS","GC","GD","P")]<-t(vapply(teams, FUN=.calculate_criteria, FUN.VALUE= numeric(8), m=results))
   for(i in length(criteria):1){
     tab<-tab[order(tab[criteria[i]], decreasing = T),]
   }
@@ -52,8 +53,6 @@ league_table<-function(results, mtr=FALSE, criteria=c("GD","GS","W")){
         }
       }
     })
-    unlist(a)
-    tab[tab$team%in% mt_teams1,]
     tab$mtr[tab$team%in% mt_teams1]<-unlist(a)
     tab<-tab[order(tab$mtr),]
     tab<-tab[order(tab$P, decreasing = T),]

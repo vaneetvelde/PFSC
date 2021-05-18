@@ -6,7 +6,7 @@
 \usage{
 simulate_league(
   results,
-  S = 10000,
+  S = 1e+05,
   mtr = FALSE,
   criteria = c("GD", "GS", "W"),
   strengths = FALSE
