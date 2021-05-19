@@ -3,3 +3,5 @@
 export(league_table)
 export(simulate_league)
 export(team_ratings)
+importFrom(stats,optim)
+importFrom(stats,rpois)
