@@ -1,11 +1,10 @@
 Package: PFSC
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Probabilistic Final Standing Calculator
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Hans Van Eetvelde, Christophe Ley, Lars Magnus Hvattum
+Maintainer: Hans Van Eetvelde <Hans.VanEetvelde@UGent.be>
+Description: The PFSC package provides functions to simulate the remainder of prematurely stopped soccer leagues. It calculates for each team the probabilities to reach each position in the final league table.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
