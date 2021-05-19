@@ -24,7 +24,7 @@ The PFSC package provides functions to simulate the remainder of prematurely sto
 
 You can install this package from [GitHub](https://github.com/) with:
 
-```{r}
+```{r, echo=T, eval=F}
 # install.packages("devtools")
 devtools::install_github("vaneetvelde/PFSC")
 ```
