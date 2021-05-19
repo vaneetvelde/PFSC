@@ -16,11 +16,11 @@ A list with two parts: 1) a dataframe with the estimated ratings of the teams 2)
 This function estimates the strengths of the teams, given the results, based on a Bivariate Poisson model.
 }
 \examples{
-teams<-paste0("Team ",LETTERS[1:10])
-results<-subset(merge(teams, teams), x!=y)
-colnames(results)<-c("home_team","away_team")
-rownames(results)<-NULL
-results$home_score<-rpois(nrow(results),lambda = 1)
-results$away_score<-rpois(nrow(results),lambda = 1)
+teams <- paste0("Team ", LETTERS[1:10])
+results <- subset(merge(teams, teams), x != y)
+colnames(results) <- c("home_team", "away_team")
+rownames(results) <- NULL
+results$home_score <- rpois(nrow(results), lambda = 1)
+results$away_score <- rpois(nrow(results), lambda = 1)
 team_ratings(results)
 }

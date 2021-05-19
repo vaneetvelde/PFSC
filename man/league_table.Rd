@@ -20,11 +20,11 @@ A dataframe with the final standing of the league.
 This function creates the official league table, given the match results.
 }
 \examples{
-teams<-paste0("Team ",LETTERS[1:10])
-results<-subset(merge(teams, teams), x!=y)
-colnames(results)<-c("home_team","away_team")
-rownames(results)<-NULL
-results$home_score<-rpois(nrow(results),lambda = 1)
-results$away_score<-rpois(nrow(results),lambda = 1)
+teams <- paste0("Team ", LETTERS[1:10])
+results <- subset(merge(teams, teams), x != y)
+colnames(results) <- c("home_team", "away_team")
+rownames(results) <- NULL
+results$home_score <- rpois(nrow(results), lambda = 1)
+results$away_score <- rpois(nrow(results), lambda = 1)
 league_table(results)
 }

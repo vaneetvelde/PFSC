@@ -30,12 +30,12 @@ A dataframe with the probabilistic final standing of the league.
 This function creates a probabilistic final standing, given the played matches
 }
 \examples{
-teams<-paste0("Team ",LETTERS[1:10])
-results<-subset(merge(teams, teams), x!=y)
-colnames(results)<-c("home_team","away_team")
-rownames(results)<-NULL
-results$home_score<-rpois(nrow(results),lambda = 1)
-results$away_score<-rpois(nrow(results),lambda = 1)
-results<-results[sample(nrow(results),50),]
-simulate_league(results, S=1000)
+teams <- paste0("Team ", LETTERS[1:10])
+results <- subset(merge(teams, teams), x != y)
+colnames(results) <- c("home_team", "away_team")
+rownames(results) <- NULL
+results$home_score <- rpois(nrow(results), lambda = 1)
+results$away_score <- rpois(nrow(results), lambda = 1)
+results <- results[sample(nrow(results), 50), ]
+simulate_league(results, S = 1000)
 }
