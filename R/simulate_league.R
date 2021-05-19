@@ -13,6 +13,7 @@
 #' rownames(results)<-NULL
 #' results$home_score<-rpois(nrow(results),lambda = 1)
 #' results$away_score<-rpois(nrow(results),lambda = 1)
+#' results<-results[sample(nrow(results),50),]
 #' simulate_league(results)
 #' @export
 
@@ -26,36 +27,40 @@ simulate_league<-function(results, S=100000, mtr=FALSE, criteria=c("GD","GS","W"
                                    paste0(results$home_team, results$away_team),]
   played_matches<-results[c("home_team","away_team","home_score","away_score")]
   nmatch<-nrow(remaining_matches)
-  MLE<-team_ratings(results)
-  ratings<-MLE$ratings
-  sim_data<-merge(remaining_matches,ratings,by.x="home_team", by.y="teams")
-  sim_data<-merge(sim_data,ratings, by.x="away_team",by.y="teams")
-  beta0<-MLE$parameters$intercept
-  h<-MLE$parameters$home_effect
-  betaC<-MLE$parameters$covariance
-  sim_data$lambda1<-exp(beta0+h+sim_data$strengths.x-sim_data$strengths.y)
-  sim_data$lambda2<-exp(beta0+sim_data$strengths.y-sim_data$strengths.x)
-  cov_goals<-rpois(S*nmatch,lambda=betaC)
-  simulations<-array(data=c(rpois(S*nmatch,lambda=sim_data$lambda1)+cov_goals,
-                            rpois(S*nmatch,lambda=sim_data$lambda2)+cov_goals),
-                     dim=c(nmatch,S,2))
-  standings<-list()
-  for(i in 1:S){
-    remaining_matches[c("home_score","away_score")]<-simulations[,i,]
-    sim_results<-rbind(played_matches, remaining_matches)
-    table1<-league_table(sim_results, mtr=mtr,criteria = criteria )
-    standings[[i]]<-order(table1$team)
-  }
-  standings2<-do.call(cbind,standings)
-  team_probs<-function(team){sapply(1:nb.teams,function(rank){mean(standings2[team,]==rank)})}
-  PFS<-t(sapply(1:nb.teams, team_probs))
-  rownames(PFS)<-teams
-  exp_rank<-sapply(teams, function(team){PFS[team,]%*%1:nb.teams})
-  PFS<-data.frame(cbind(PFS, exp_rank))
-  PFS<-PFS[order(exp_rank),]
-  if(strengths){
-    return(list(PFS=PFS,ratings=ratings))
+  if(nmatch>0){
+    MLE<-team_ratings(results)
+    ratings<-MLE$ratings
+    sim_data<-merge(remaining_matches,ratings,by.x="home_team", by.y="teams")
+    sim_data<-merge(sim_data,ratings, by.x="away_team",by.y="teams")
+    beta0<-MLE$parameters$intercept
+    h<-MLE$parameters$home_effect
+    betaC<-MLE$parameters$covariance
+    sim_data$lambda1<-exp(beta0+h+sim_data$strengths.x-sim_data$strengths.y)
+    sim_data$lambda2<-exp(beta0+sim_data$strengths.y-sim_data$strengths.x)
+    cov_goals<-rpois(S*nmatch,lambda=betaC)
+    simulations<-array(data=c(rpois(S*nmatch,lambda=sim_data$lambda1)+cov_goals,
+                              rpois(S*nmatch,lambda=sim_data$lambda2)+cov_goals),
+                       dim=c(nmatch,S,2))
+    standings<-list()
+    for(i in 1:S){
+      remaining_matches[c("home_score","away_score")]<-simulations[,i,]
+      sim_results<-rbind(played_matches, remaining_matches)
+      table1<-league_table(sim_results, mtr=mtr,criteria = criteria )
+      standings[[i]]<-order(table1$team)
+    }
+    standings2<-do.call(cbind,standings)
+    team_probs<-function(team){sapply(1:nb.teams,function(rank){mean(standings2[team,]==rank)})}
+    PFS<-t(sapply(1:nb.teams, team_probs))
+    rownames(PFS)<-teams
+    exp_rank<-sapply(teams, function(team){PFS[team,]%*%1:nb.teams})
+    PFS<-data.frame(cbind(PFS, exp_rank))
+    PFS<-PFS[order(exp_rank),]
+    if(strengths){
+      return(list(PFS=PFS,ratings=ratings))
+    }else{
+      return(PFS)
+    }
   }else{
-    return(PFS)
+    return(league_table(results, mtr, criteria))
   }
 }
