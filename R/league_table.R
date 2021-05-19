@@ -17,6 +17,7 @@
 #' @param mtr logical. If true, the ranks of teams with equal number of points is determined by their mutual results.
 #' @param criteria The order of criteria on which the table is made when teams have equal number of points. Possible criteria are the goal difference ("GD"), the number of goals scored ("GS") and the number of matches won ("W")
 #' @return A dataframe with the final standing of the league.
+#' @export
 #' @examples
 #' teams<-paste0("Team ",LETTERS[1:10])
 #' results<-subset(merge(teams, teams), x!=y)
@@ -25,7 +26,7 @@
 #' results$home_score<-rpois(nrow(results),lambda = 1)
 #' results$away_score<-rpois(nrow(results),lambda = 1)
 #' league_table(results)
-#' @export
+
 
 league_table<-function(results, mtr=FALSE, criteria=c("GD","GS","W")){
   m<-results
