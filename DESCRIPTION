@@ -2,8 +2,8 @@ Package: PFSC
 Type: Package
 Title: Probabilistic Final Standing Calculator
 Version: 0.1.0
-Author: Hans Van Eetvelde, Christophe Ley, Lars Magnus Hvattum
-Maintainer: Hans Van Eetvelde <Hans.VanEetvelde@UGent.be>
+Authors@R: person("Hans", "Van Eetvelde", email = "Hans.VanEetvelde@UGent.be",
+  role = c("aut", "cre"))
 Description: The PFSC package provides functions to simulate the remainder of prematurely stopped soccer leagues. It calculates for each team the probabilities to reach each position in the final league table.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -11,3 +11,6 @@ LazyData: true
 RoxygenNote: 7.1.1
 Imports: 
     stats
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
