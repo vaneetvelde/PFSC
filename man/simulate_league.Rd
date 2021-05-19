@@ -15,6 +15,8 @@ simulate_league(
 \arguments{
 \item{results}{The results of the played matches.}
 
+\item{S}{The number of simulations.}
+
 \item{mtr}{logical. If true, the ranks of teams with equal number of points is determined by their mutual results.}
 
 \item{criteria}{The order of criteria on which the table is made when teams have equal number of points. Possible criteria are the goal difference ("GD"), the number of goals scored ("GS") and the number of matches won ("W")}
@@ -35,5 +37,5 @@ rownames(results)<-NULL
 results$home_score<-rpois(nrow(results),lambda = 1)
 results$away_score<-rpois(nrow(results),lambda = 1)
 results<-results[sample(nrow(results),50),]
-simulate_league(results)
+simulate_league(results, S=1000)
 }
