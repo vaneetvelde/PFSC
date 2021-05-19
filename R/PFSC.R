@@ -5,8 +5,8 @@
 #'
 #' @docType package
 #' @author Hans Van Eetvelde <Hans.VanEetvelde@@UGent.be>
-#' @author Christophe Ley
 #' @author Lars Magnus Hvattum
+#' @author Christophe Ley
 #' @name PFSC
 #' @references Van Eetvelde, H., Hvattum, L. M., & Ley, C. (2021). The Probabilistic Final Standing Calculator: a fair stochastic tool to handle abruptly stopped football seasons. arXiv preprint arXiv:2101.10597.
 NULL

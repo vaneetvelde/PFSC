@@ -14,7 +14,7 @@ Van Eetvelde, H., Hvattum, L. M., & Ley, C. (2021). The Probabilistic Final Stan
 \author{
 Hans Van Eetvelde <Hans.VanEetvelde@UGent.be>
 
-Christophe Ley
-
 Lars Magnus Hvattum
+
+Christophe Ley
 }
