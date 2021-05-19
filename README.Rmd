@@ -7,29 +7,34 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  eval = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
-library(knitr)
 ```
 
-# PFSC: Probabilistic Final Standing Calculator
+# PFSC
+
+<!-- badges: start -->
+<!-- badges: end -->
 
 The PFSC package provides functions to simulate the remainder of prematurely stopped soccer leagues. It calculates for each team the probabilities to reach each position in the final league table.
 
-# Istallation
+## Installation
 
-The package can be installed via the following command, if you have the devtools package installed.
+You can install this package from [GitHub](https://github.com/) with:
 
-```{r, echo=T, eval=F}
-devtools::install_github('vaneetvelde/PFSC')
+```{r}
+# install.packages("devtools")
+devtools::install_github("vaneetvelde/PFSC")
 ```
 
-# Functions
+## Example
 
-The three main functions are
+This is a basic example which shows you how to solve a common problem:
 
-1. league_table: To construct the official league table given a set of matches
-2. team_ratings
+```{r example}
+library(PFSC)
+## basic example code
+```
+
