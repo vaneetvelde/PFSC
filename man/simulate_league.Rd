@@ -34,5 +34,6 @@ colnames(results)<-c("home_team","away_team")
 rownames(results)<-NULL
 results$home_score<-rpois(nrow(results),lambda = 1)
 results$away_score<-rpois(nrow(results),lambda = 1)
+results<-results[sample(nrow(results),50),]
 simulate_league(results)
 }
