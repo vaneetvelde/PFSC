@@ -31,10 +31,24 @@ devtools::install_github("vaneetvelde/PFSC")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
+We give the example of the stopped season of the French first ligue in 2019-2020
 ```{r example}
 library(PFSC)
-## basic example code
+results<-read.csv("https://www.football-data.co.uk/mmz4281/1920/F1.csv")
+results<-results[,4:7]
+colnames(results)<-c("home_team","away_team","home_score","away_score")
+
+# The intermediate league table
+table1<-league_table(results)
+table1
+
+# The estimated team strengths
+ratings<-team_ratings(results)$ratings
+ratings
+
+# The probabistic final standing
+PFS_France<-simulate_league(results, S=10000)
+PFS_France
+
 ```
 
