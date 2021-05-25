@@ -26,7 +26,7 @@ simulate_league <- function(results, S = 100000, mtr = FALSE, criteria = c("GD",
   colnames(all_matches) <- c("home_team", "away_team")
   rownames(all_matches) <- NULL
   remaining_matches <- all_matches[!paste0(all_matches$home_team, all_matches$away_team) %in%
-    paste0(results$home_team, results$away_team), ]
+                                     paste0(results$home_team, results$away_team), ]
   played_matches <- results[c("home_team", "away_team", "home_score", "away_score")]
   nmatch <- nrow(remaining_matches)
   if (nmatch > 0) {
@@ -61,18 +61,22 @@ simulate_league <- function(results, S = 100000, mtr = FALSE, criteria = c("GD",
       })
     }
     PFS <- t(sapply(1:nb.teams, team_probs))
-    rownames(PFS) <- teams
-    exp_rank <- sapply(teams, function(team) {
-      PFS[team, ] %*% 1:nb.teams
-    })
-    PFS <- data.frame(cbind(PFS, exp_rank))
-    PFS <- PFS[order(exp_rank), ]
-    if (strengths) {
-      return(list(PFS = PFS, ratings = ratings))
-    } else {
-      return(PFS)
-    }
   } else {
-    return(league_table(results, mtr, criteria))
+    table1<-league_table(results, mtr, criteria)
+    PFS<-diag(nrow=nb.teams)
   }
+  rownames(PFS) <- teams
+  colnames(PFS) <- paste0("Pos.",1:nb.teams)
+  exp_rank <- sapply(teams, function(team) {
+    PFS[team, ] %*% 1:nb.teams
+  })
+  PFS <- data.frame(cbind(PFS, exp_rank))
+  PFS <- PFS[order(exp_rank), ]
+  if (strengths) {
+    return(list(PFS = PFS, ratings = ratings))
+  } else {
+    return(PFS)
+  }
+
+
 }

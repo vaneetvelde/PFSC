@@ -49,6 +49,5 @@ ratings
 # The probabistic final standing
 PFS_France<-simulate_league(results, S=10000)
 PFS_France
-
 ```
 
