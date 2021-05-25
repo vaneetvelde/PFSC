@@ -31,7 +31,7 @@ devtools::install_github("vaneetvelde/PFSC")
 
 ## Example
 
-We give the example of the stopped season of the French first ligue in 2019-2020.
+We give the example of the stopped season of the French first ligue in 2019-2020. 
 ```{r example}
 library(PFSC)
 results<-read.csv("https://www.football-data.co.uk/mmz4281/1920/F1.csv")
