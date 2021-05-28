@@ -17,7 +17,7 @@ simulate_league(
 
 \item{S}{The number of simulations.}
 
-\item{mtr}{logical. If true, the ranks of teams with equal number of points is determined by their mutual results.}
+\item{mtr}{logical. If true, the ranks of teams with equal number of points are determined by their mutual results.}
 
 \item{criteria}{The order of criteria on which the table is made when teams have equal number of points. Possible criteria are the goal difference ("GD"), the number of goals scored ("GS") and the number of matches won ("W")}
 

@@ -3,7 +3,7 @@
 #' This function creates a probabilistic final standing, given the played matches
 #' @param results The results of the played matches.
 #' @param S The number of simulations.
-#' @param mtr logical. If true, the ranks of teams with equal number of points is determined by their mutual results.
+#' @param mtr logical. If true, the ranks of teams with equal number of points are determined by their mutual results.
 #' @param criteria The order of criteria on which the table is made when teams have equal number of points. Possible criteria are the goal difference ("GD"), the number of goals scored ("GS") and the number of matches won ("W")
 #' @param strengths logical. If true, the function also returns the estimated team strengths
 #' @return A dataframe with the probabilistic final standing of the league.
