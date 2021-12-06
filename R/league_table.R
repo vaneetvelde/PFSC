@@ -34,11 +34,7 @@ league_table <- function(results, mtr = FALSE, criteria = c("GD", "GS", "W")) {
     GC = 0, GD = 0, P = 0, stringsAsFactors = F
   )
   tab[c("M", "W", "D", "L", "GS", "GC", "GD", "P")] <- t(vapply(teams, FUN = .calculate_criteria, FUN.VALUE = numeric(8), m = results))
-  for (i in length(criteria):1) {
-    tab <- tab[order(tab[criteria[i]], decreasing = T), ]
-  }
-  tab <- tab[order(tab$P, decreasing = T), ]
-  rownames(tab) <- NULL
+  tab <- tab[do.call(base::order, as.list(-tab[criteria])), ]
   if (mtr) {
     tab$mtr <- 0
     pts <- unique(tab$P)
@@ -58,8 +54,8 @@ league_table <- function(results, mtr = FALSE, criteria = c("GD", "GS", "W")) {
     })
     tab$mtr[tab$team %in% mt_teams1] <- unlist(a)
     tab <- tab[order(tab$mtr), ]
-    tab <- tab[order(tab$P, decreasing = T), ]
-    rownames(tab) <- NULL
   }
+  tab <- tab[order(tab$P, decreasing = T), ]
+  rownames(tab) <- NULL
   return(tab)
 }
