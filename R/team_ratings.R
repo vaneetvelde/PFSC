@@ -2,7 +2,7 @@
   factorial(n) / factorial(n - x) / factorial(x)
 }
 
-.bivariate_poisson_negative_loglikelihood <- function(parameters, results) {
+.bivariate_poisson_negative_loglikelihood <- function(parameters, results, weights) {
   # Split up parameters
   n <- length(parameters)
   strengths <- c(parameters[1:(n - 3)], 0)
@@ -29,7 +29,7 @@
     term <- term * lambdaratio^k
     som <- som + term
   }
-  out <- -sum(logchances + log(som))
+  out <- -sum((logchances + log(som))*weights)
   out
 }
 
@@ -49,7 +49,7 @@
 #' team_ratings(results)
 #' @export
 
-team_ratings <- function(results) {
+team_ratings <- function(results, weights=1) {
   if(is.null(results$neutral)){results$neutral<-F}
   teams <- unique(sort(c(results$home_team, results$away_team)))
   nb.teams <- length(teams)
@@ -57,7 +57,7 @@ team_ratings <- function(results) {
   results$awayId <- match(results$away_team, teams)
   nb.parameters <- nb.teams + 2
   parameters <- rep(0, nb.parameters)
-  MLE <- optim(parameters, .bivariate_poisson_negative_loglikelihood, results = results, method = "BFGS")
+  MLE <- optim(parameters, .bivariate_poisson_negative_loglikelihood, results = results,weights=weights, method = "BFGS")
   strengths <- c(MLE$par[1:(nb.teams - 1)], 0)
   strengths <- scale(strengths, scale = F)
   ratings <- data.frame(teams, strengths)
