@@ -50,7 +50,7 @@
 #' @export
 
 team_ratings <- function(results) {
-  results$neutral<-ifelse(is.null(results$neutral), FALSE, results$neutral)
+  if(is.null(results$neutral)){results$neutral<-F}
   teams <- unique(sort(c(results$home_team, results$away_team)))
   nb.teams <- length(teams)
   results$homeId <- match(results$home_team, teams)
