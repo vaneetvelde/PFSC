@@ -10,7 +10,7 @@
   h <- parameters[n - 1]
   betaC <- exp(parameters[n])
   # Calculate lambdas for all matches and both teams
-  loglambdasHome <- beta0 + h + strengths[results$homeId] - strengths[results$awayId]
+  loglambdasHome <- beta0 + h*(!results$neutral) + strengths[results$homeId] - strengths[results$awayId]
   loglambdasAway <- beta0 + strengths[results$awayId] - strengths[results$homeId]
   lambdasHome <- exp(loglambdasHome)
   lambdasAway <- exp(loglambdasAway)
@@ -50,6 +50,7 @@
 #' @export
 
 team_ratings <- function(results) {
+  results$neutral<-ifelse(is.null(results$neutral), FALSE, results$neutral)
   teams <- unique(sort(c(results$home_team, results$away_team)))
   nb.teams <- length(teams)
   results$homeId <- match(results$home_team, teams)
